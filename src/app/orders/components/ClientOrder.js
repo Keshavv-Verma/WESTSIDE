@@ -8,10 +8,9 @@ import toast from 'react-hot-toast'
 import westlogo from '../../westlogo.png'
 const ClientOrder = (outlet) => {
   
-  let {meData,a}=outlet['outlet'];
+  let {meData,a}=outlet['outlet'] || {};
   
-  const [total, settotal] = useState(0)
-  // settotal(meData.total)
+  const [total, settotal] = useState(meData?.total || 0)
   
   const makePayment = async (FName,LName,address,city,state,pinCode,totalAmount,prodInfo) => {
     try {
@@ -49,8 +48,9 @@ const ClientOrder = (outlet) => {
         const [pinparent, setpinparent] = useState(false)
         const [onlyCoupon, setonlyCoupon] = useState(true)
         useEffect(() => {
-       
-          settotal(meData.total)
+          if (meData?.total !== undefined) {
+            settotal(meData.total)
+          }
           if (FName.length>=3 && FName.length>=3 && address.length>=3) {
            
             setDisabled(false)
@@ -102,7 +102,7 @@ const ClientOrder = (outlet) => {
         <h1 className='text-3xl text-gray-400'>CONTACT</h1>
         <div className="profile  flex items-center gap-7">
             <img className='h-10' src="https://cdn-icons-png.flaticon.com/128/11312/11312760.png" alt="" />
-            <h1>{(a.data)['name']} {(a.data)['email']}</h1>
+            <h1>{a?.data?.name || ''} {a?.data?.email || ''}</h1>
         </div>
             <h1 className='text-3xl'>Shipping Address</h1>
         <div className="form-option flex flex-col gap-7">

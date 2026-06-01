@@ -17,10 +17,12 @@ const MyCart = (props) => {
   }
   const [val, setval] = useState(1);
 
-  let {a,b,c}=props['outlet']
-  let outlet=a
+  let {a,b,c}=props['outlet'] || {}
+  let outlet=a || {}
   
-  // console.log("myOutlet in my Cart Page is:",outlet);
+  if (!outlet || !outlet._id || !outlet.title) {
+    return null;
+  }
   const handleDelete=()=>{
     var myCookies = getCookies();
     Object.keys(myCookies).forEach(key => {

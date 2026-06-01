@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import Link from 'next/link'
 const ClientCom = (outlet) => {
     const router=useRouter()
-    let items=outlet.outlet
+    let items=outlet?.outlet || []
     const handleClick=(value)=>{
         localStorage.removeItem(`myWestSide_${value.title}`);
                 router.refresh()

@@ -3,23 +3,20 @@ import React, { useEffect, useState } from 'react';
 import MyCart from '../../MyCart';
 import Link from 'next/link';
 
-const CartClient = ( outlet ) => {
+const CartClient = ( props ) => {
   const [total, setTotal] = useState(0);
  
-  const [json, setJson] = useState(outlet.outlet.k);
-  if (json==undefined) {
-    setJson([]);
-  }
+  const [json, setJson] = useState(props?.outlet?.k || []);
 
   useEffect(() => {
-   
-    
     let totalPrice = 0;
-    json.forEach((element) => {
-      totalPrice += element.price;
+    (json || []).forEach((element) => {
+      if (element && element.price) {
+        totalPrice += element.price;
+      }
     });
     setTotal(totalPrice);
-  }, [])
+  }, [json])
   
 
   return (
