@@ -18,16 +18,18 @@ if (typeof globalThis !== 'undefined' && globalThis.fetch && !globalThis.__fetch
 }
 
 // Override Response.prototype.json to gracefully handle non-JSON responses (like 404 HTML pages) during build time.
-if (typeof globalThis !== 'undefined' && globalThis.Response && !globalThis.__responseJsonPatched) {
-  const originalJson = globalThis.Response.prototype.json;
-  globalThis.Response.prototype.json = async function () {
-    try {
-      return await originalJson.call(this);
-    } catch (err) {
-      console.warn("patchFetch intercepted JSON parsing error. Returning fallback object:", err.message);
-      return { success: false, products: [], myproduct: null, status: false };
-    }
-  };
-  globalThis.__responseJsonPatched = true;
+if (typeof window === 'undefined') {
+  if (typeof globalThis !== 'undefined' && globalThis.Response && !globalThis.__responseJsonPatched) {
+    const originalJson = globalThis.Response.prototype.json;
+    globalThis.Response.prototype.json = async function () {
+      try {
+        return await originalJson.call(this);
+      } catch (err) {
+        console.warn("patchFetch intercepted JSON parsing error. Returning fallback object:", err.message);
+        return { success: false, products: [], myproduct: null, status: false };
+      }
+    };
+    globalThis.__responseJsonPatched = true;
+  }
 }
 
