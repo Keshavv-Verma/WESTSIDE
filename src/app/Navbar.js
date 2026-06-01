@@ -1,16 +1,11 @@
 'use client'
 import { TypeAnimation } from 'react-type-animation';
 import { CiMenuBurger } from "react-icons/ci";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
 
 import Popup from 'reactjs-popup';
-import LoadingBar from "react-top-loading-bar";
 import 'reactjs-popup/dist/index.css';
 import Image from "next/image";
 import Script from "next/script";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBagShopping, faCartShopping, faCheck, faHeart, faL, faMagnifyingGlass, faTrash } from "@fortawesome/free-solid-svg-icons";
-import ReactSearchBox from "react-search-box";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { redirect, usePathname, useRouter } from 'next/navigation';
@@ -21,28 +16,13 @@ const Navbar = (outlet) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
   const [menuShow, setMenuShow] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [typeDis, settypeDis] = useState(false)
   const [search, setsearch] = useState("")
 
-  const handleSearch = (e) => {
-    // console.log("handleSearch is Running");
-    // console.log(e.target.value);
-    settypeDis(true)
-    setsearch(e.target.value)
-    if (e.target.value = "") {
-      // console.log("If Condtion Satisfied");
-      if (e.target.value = "") {
-        settypeDis(true)
-        settypeDis(false)
-      }
-
-
-    }
-  }
   const router = useRouter();
   const pathname = usePathname()
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // console.log("My Router PathName is my Router PathName is:::::",pathname);
   let prop = (outlet['outlet'])
@@ -62,40 +42,44 @@ const Navbar = (outlet) => {
   const [input, setInput] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div className={`z-50 sticky top-0 ${pathname == '/' ? 'bg-transparent' : 'bg-white'} w-[100vw]`}>
 
-
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Welcome To Our Website</ModalHeader>
-              <ModalBody>
-                Westside is your ultimate destination for fashion-forward clothing and accessories.
-                We offer a wide range of styles curated to suit every taste, from casual wear to
-                formal attire. Our mission is to provide high-quality products that make you look
-                and feel confident in every occasion.
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="danger" onPress={
-                  () => {
-                    delete_cookie('token');
-                    router.push('/')
-                    router.refresh();
-                    onClose()
-                  }
-                }>
-                  Logout
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      {/* Simple Modal Replace */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h2 className="text-2xl font-bold mb-4">Welcome To Our Website</h2>
+            <p className="text-gray-700 mb-6">
+              Westside is your ultimate destination for fashion-forward clothing and accessories.
+              We offer a wide range of styles curated to suit every taste, from casual wear to
+              formal attire. Our mission is to provide high-quality products that make you look
+              and feel confident in every occasion.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  delete_cookie('token');
+                  router.push('/')
+                  router.refresh();
+                  closeModal()
+                }}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className=" h-32 flex  justify-around  items-center shadow-xl bg-transparent
    ">
@@ -218,18 +202,17 @@ const Navbar = (outlet) => {
             <img width="30" height="30" src="https://img.icons8.com/ios/50/shopping-cart--v1.png" alt="shopping-cart--v1" />
           </Link>
           <div className='flex flex-col'>
-
-            {/* <Link href={'/Login'}>
-<button className="button bg-black text-white text-md px-3 rounded-md">{getState}</button>
-</Link> */}
             {getState == "Login" && <Link href={'/Login'}>
               <button className="cursor-pointer button  text-black text-md px-3 rounded-md font-light">{getState}</button>
             </Link>}
-            {getState != "Login" && <div>
-              <Button className='bg-transparent text-2xl' onPress={onOpen}>{getState}</Button>
-            </div>
-            }
-
+            {getState != "Login" && (
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="cursor-pointer bg-transparent text-xl font-semibold hover:underline"
+              >
+                {getState}
+              </button>
+            )}
           </div>
         </div>
       </div>

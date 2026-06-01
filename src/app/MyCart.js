@@ -1,6 +1,5 @@
 'use client'
-import { faDeleteLeft, faRemove } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { MdDelete } from 'react-icons/md'
 import React, { useEffect, useState } from 'react'
 
 const MyCart = (props) => {
@@ -20,22 +19,19 @@ const MyCart = (props) => {
 
   let {a,b,c}=props['outlet']
   let outlet=a
-  console.log("a value is::::::::::::::::",props['outlet']);
   
   // console.log("myOutlet in my Cart Page is:",outlet);
   const handleDelete=()=>{
     var myCookies = getCookies();
     Object.keys(myCookies).forEach(key => {
-      console.log(key);
       if (key.substring(10,20)==outlet['_id'].substring(0, 10)) {
-        console.log("Equal Equal Hoorahy");
         delete_cookie(key);
       }
   });
     window.location.reload();
   }
   useEffect(() => {
-    console.log("use Effect is Running");
+    // Effect hook for cart value changes
   }, [val])
   
  
@@ -59,15 +55,11 @@ const MyCart = (props) => {
                         c(b-outlet['price'])
                         setval(val-1)
                         var myCookies = getCookies();
-                        console.log("Running Plus and Setting my Cookies are:",myCookies);
                         Object.keys(myCookies).forEach(key => {
-                          console.log(key);
                           if (key.substring(10,20)==outlet['_id'].substring(0, 10)) {
-                            console.log("Equal Equal Hoorahy");
                             delete_cookie(key);
-                            document.cookie = `${".westside." + outlet['_id'].substring(0, 10)+"_"+outlet['size'].split("_")[0]+"_"+ (val-1)}=${JSON.stringify(outlet['_id'])};path=/`;
+                            document.cookie = `${"."+outlet['_id'].substring(0, 10)+"_"+outlet['size'].split("_")[0]+"_"+ (val-1)}=${JSON.stringify(outlet['_id'])};path=/`;
                           }
-                          console.log(`${key}: ${myCookies[key]}`);
                       });
                         
                       }
@@ -78,21 +70,18 @@ const MyCart = (props) => {
                         c(b+outlet['price'])
                         setval(val+1)
                         var myCookies = getCookies();
-                        console.log("Running Plus and Setting my Cookies are:",myCookies);
                         Object.keys(myCookies).forEach(key => {
                           if (key.substring(10,20)==outlet['_id'].substring(0, 10)) {
-                            console.log("Equal Equal Hoorahy");
                             delete_cookie(key);
-                            document.cookie = `${".westside." + outlet['_id'].substring(0, 10)+"_"+outlet['size'].split("_")[0]+"_"+ (val+1)}=${JSON.stringify(outlet['_id'])};path=/`;
+                            document.cookie = `${"."+outlet['_id'].substring(0, 10)+"_"+outlet['size'].split("_")[0]+"_"+ (val+1)}=${JSON.stringify(outlet['_id'])};path=/`;
                           }
-                          console.log(`${key}: ${myCookies[key]}`);
                       });
                       // myCookies[`${".westside." + outlet['_id'].substring(0, 10) + "_1"}`]
                     }
                       }}>+</button>
                 </div>
                 <div className="subtotal">RS.{outlet['price']}</div>
-                <div  className="Delete cursor-pointer" onClick={handleDelete}><FontAwesomeIcon icon={faDeleteLeft}></FontAwesomeIcon></div>
+                <div  className="Delete cursor-pointer text-2xl" onClick={handleDelete}><MdDelete></MdDelete></div>
             </div>
         </div>
   )

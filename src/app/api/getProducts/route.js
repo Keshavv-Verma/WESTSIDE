@@ -7,7 +7,6 @@ import ProductsBeauty from "../../../../models/ProductsBeauty";
 import ProductsBrand from "../../../../models/ProductsBrand";
 export async function GET(req,res){
     const query=req.url.split("=")[1]
-    console.log("My Request is This this this is:::::::::::",query);
     await connectDb();
     let products=null;
     if (query=='men') {

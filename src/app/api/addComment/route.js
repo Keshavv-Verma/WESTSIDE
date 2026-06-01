@@ -7,7 +7,6 @@ import ProductsWomen from "../../../../models/ProductsWomen";
 
 export async function POST(req,res) {
     let query=await req.json();
-    console.log("Query in Add Comment is is:::::::",query);
     await connectDb();
     let query1=0;
     if(query.type=="men"){

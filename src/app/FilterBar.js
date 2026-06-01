@@ -7,7 +7,6 @@ import Sidebar from './Sidebar';
 
 const FilterBar = (params) => {
   const arr=params.outlet
-  console.log("Arr in Client side is:",arr);
   const [myarr, setmyarr] = useState(arr)
   const [change, setchange] = useState(50)
   const [loading, setloading] = useState(false)
@@ -16,9 +15,7 @@ let k=arr
   const handleChange=async (e)=>{
     setchange(e.target.value)
     setloading(true)
-    console.log(change);
       let y=[]
-        console.log("Hnadle Change is Running");
 
         let newPromise =  
   new Promise(function (resolve, reject) { 
@@ -37,17 +34,13 @@ let result = await newPromise;
         }
         setloading(false)
         setmyarr(y);
-        console.log("Our k Array is",myarr);
         
     } 
     const handleSort=()=>{
-      console.log("Handle Sort Is Running");
-
+      // Sort functionality
     }
     const handleLower=(e)=>{
-      console.log("Handle Lower is Running`");
       setBoxClick(e.target.value)
-      console.log(e.target.value);
     }
   return (
     <>

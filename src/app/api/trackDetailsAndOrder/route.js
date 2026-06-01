@@ -5,7 +5,6 @@ export async function POST(req,res){
     try{
         const {orderId} =await req.json(); 
         await connectDb();
-        console.log(orderId,"::::::::::::::::::::myslug myslug myslug");
         // connecting with mongodb
         const arrPrd=[]
         // Finding my query
@@ -23,12 +22,9 @@ export async function POST(req,res){
                 arrPrd.push(mypdr);
 
             }
-            
-            // console.log("Under Server Side ........................",myproduct);
         return Response.json({status:true,productInfo:arrPrd,userInfo:myuser},{status:200})
     }
     catch(error){
-        console.log("Error Founded",error);
         return Response.json({status:false},{status:400})
     }
 

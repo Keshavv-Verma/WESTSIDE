@@ -1,12 +1,10 @@
 import React from 'react'
-import { ClimbingBoxLoader,MoonLoader,ClipLoader } from 'react-spinners'
-import {CircularProgress} from "@nextui-org/react";
+import { MoonLoader } from 'react-spinners'
 
 const Spinner = () => {
   return (
-        <div >
-       
-       <CircularProgress color="default" aria-label="Loading..."/>
+        <div className="flex justify-center items-center">
+       <MoonLoader color="#F62B00" size={50}/>
     </div>
   )
 }

@@ -1,6 +1,4 @@
 import React from 'react'
-import {Button} from "@nextui-org/react";
-import {UserIcon} from '../components/UserIcon';
 import { CiShoppingCart } from "react-icons/ci";
 import Link from 'next/link';
 
@@ -14,17 +12,16 @@ const page = () => {
         </center>
         <div className="mybuttons w-[96vw] flex justify-evenly flex-col">
 <Link href={'/admin/addProduct'}>
-        <Button className='mt-9' color="danger" variant="bordered" startContent={<CiShoppingCart className='text-xl' />
-}>
-  
-        Add Products
-      </Button>
+        <button className='mt-9 px-6 py-2 border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white rounded flex items-center gap-2'>
+          <CiShoppingCart className='text-xl' />
+          Add Products
+        </button>
   </Link>
   <Link href={'/admin/listorders'}>
-        <Button className='mt-9' color="success" variant="bordered" startContent={<CiShoppingCart className='text-xl' />
-}>
-        View Orders
-      </Button>
+        <button className='mt-9 px-6 py-2 border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white rounded flex items-center gap-2'>
+          <CiShoppingCart className='text-xl' />
+          View Orders
+        </button>
   </Link>
        
        

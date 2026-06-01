@@ -1,8 +1,5 @@
 'use client'
 import React, { useState } from "react";
-import {Input} from "@nextui-org/react";
-import {MailIcon} from '../../components/MailIcon';
-import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 import toast from "react-hot-toast";
 
 
@@ -39,22 +36,17 @@ export default function App() {
             setquantity(e.target.value);
         }
         if (e.target.name==="img") {
-            console.log("Set Img is Running");
             setimg(e.target.value);
         }
         if (e.target.name==="brand") {
-            console.log("Set Img is Running");
             setbrand(e.target.value);
         }
         
 
     }
     const handleClick=()=>{
-        console.log("Handle Click is Running");
-        console.log("My Categobnbmb nbnnry Value is:::::::",selectedValue);
         setload(true);
         setcategory(selectedValue)
-        console.log("My Category Value is:::::::",category);
         let k=""
         if(selectedValue=='men'){
             k="addpro"
@@ -64,7 +56,6 @@ export default function App() {
             k="addproWomen"
         }
         else if(selectedValue=='kids'){
-            console.log("kids Condtion Satisifed");
             k="addproKids"
         }
         else if(selectedValue=='brand'){
@@ -106,141 +97,116 @@ export default function App() {
         
     }
   return (
-    <div className="flex flex-col gap-4 mt-11">
+    <div className="flex flex-col gap-4 mt-11 max-w-4xl mx-auto px-4">
       <div className="flex flex-col w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-10">
-      <Dropdown>
-      <DropdownTrigger>
-        <Button 
-          variant="bordered" 
-          className="capitalize"
-          radius="none"
-        >
-          {selectedValue}
-        </Button>
-      </DropdownTrigger>
-      <DropdownMenu 
-        aria-label="Single selection example"
-        variant="flat"
-        disallowEmptySelection
-        selectionMode="single"
-        selectedKeys={selectedKeys}
-        onSelectionChange={setSelectedKeys}
+      
+      {/* Category Dropdown */}
+      <select 
+        value={Array.from(selectedKeys)[0] || "men"}
+        onChange={(e) => setSelectedKeys(new Set([e.target.value]))}
+        className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
-       <DropdownItem  key="men">Men</DropdownItem>
-        <DropdownItem  key="women">Women</DropdownItem>
-        <DropdownItem  key="kids">Kids</DropdownItem>
-        <DropdownItem  key="beauty" className="text-danger" color="danger">
-          Beauty
-        </DropdownItem>
-        <DropdownItem key="brand"  className="text-danger" color="danger">
-          Brand
-        </DropdownItem>
-        <DropdownItem key="household" className="text-danger" color="black">
-          Household 
-        </DropdownItem>
-      </DropdownMenu>
-    </Dropdown>
-    <div className="flex gap-7">
+        <option value="men">Men</option>
+        <option value="women">Women</option>
+        <option value="kids">Kids</option>
+        <option value="beauty">Beauty</option>
+        <option value="brand">Brand</option>
+        <option value="household">Household</option>
+      </select>
 
-        <Input
-        onChange={handleChange}
-          type="text"
-          radius="none"
-          label="Title"
-          name="title"
-          placeholder="Title"
-          labelPlacement="outside"
-          startContent={
-              <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-            }
-            />
-        <Input
-        onChange={handleChange}
-          type="text"
-          radius="none"
-          label="Slug"
-          name="slug"
-          placeholder="Slug"
-          labelPlacement="outside"
-          startContent={
-              <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-            }
-            />
-            </div>
-            <div className="flex gap-7">
-
-        <Input
-        onChange={handleChange}
-        name="img"
-          type="text"
-          radius="none"
-          label="Image"
-          placeholder="Image"
-          labelPlacement="outside"
-          startContent={
-              <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-            }
-            />
-        <Input
-        onChange={handleChange}
-        name="desc"
-          type="text"
-          radius="none"
-          label="Description"
-          placeholder="Description"
-          labelPlacement="outside"
-          startContent={
-              <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-            }
-            />
-            </div>
-            <div className="flex flex-row gap-8">
-
-        <Input
-        onChange={handleChange}
-        name="price"
-        radius="none"
-          type="number"
-          label="Price"
-          placeholder="0.00"
-          labelPlacement="outside"
-          startContent={
-              <div className="pointer-events-none flex items-center">
-              <span className="text-default-400 text-small">₹</span>
-            </div>
-          }
+      {/* Title and Slug */}
+      <div className="flex gap-7 flex-col md:flex-row">
+        <div className="flex-1">
+          <label className="block text-sm font-medium mb-2">Title</label>
+          <input
+            onChange={handleChange}
+            type="text"
+            name="title"
+            placeholder="Title"
+            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-        <Input
-        onChange={handleChange}
-        name="quantity"
-        radius="none"
-          type="number"
-          label="Quantity"
-          placeholder="10"
-          labelPlacement="outside"
-          startContent={
-              <div className="pointer-events-none flex items-center">
-              <span className="text-default-400 text-small">NO.</span>
-            </div>
-          }
+        </div>
+        <div className="flex-1">
+          <label className="block text-sm font-medium mb-2">Slug</label>
+          <input
+            onChange={handleChange}
+            type="text"
+            name="slug"
+            placeholder="Slug"
+            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          </div>
-        <Input
-        radius="none"
-        onChange={handleChange}
-        name="brand"
-          type="url"
-          label="Brand"
+        </div>
+      </div>
+
+      {/* Image and Description */}
+      <div className="flex gap-7 flex-col md:flex-row">
+        <div className="flex-1">
+          <label className="block text-sm font-medium mb-2">Image URL</label>
+          <input
+            onChange={handleChange}
+            type="text"
+            name="img"
+            placeholder="Image URL"
+            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="flex-1">
+          <label className="block text-sm font-medium mb-2">Description</label>
+          <input
+            onChange={handleChange}
+            type="text"
+            name="desc"
+            placeholder="Description"
+            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      </div>
+
+      {/* Price and Quantity */}
+      <div className="flex gap-7 flex-col md:flex-row">
+        <div className="flex-1">
+          <label className="block text-sm font-medium mb-2">Price (₹)</label>
+          <input
+            onChange={handleChange}
+            type="number"
+            name="price"
+            placeholder="0.00"
+            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="flex-1">
+          <label className="block text-sm font-medium mb-2">Quantity</label>
+          <input
+            onChange={handleChange}
+            type="number"
+            name="quantity"
+            placeholder="10"
+            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      </div>
+
+      {/* Brand */}
+      <div>
+        <label className="block text-sm font-medium mb-2">Brand</label>
+        <input
+          onChange={handleChange}
+          type="text"
+          name="brand"
           placeholder="Ascot"
-          labelPlacement="outside"
-          
+          className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <Button onClick={handleClick} radius="none"  className="text-white bg-black" isLoading={load}>
-      Add Product
-    </Button>
-      
+
+      {/* Submit Button */}
+      <button 
+        onClick={handleClick} 
+        disabled={load}
+        className="w-full px-6 py-2 bg-black text-white rounded hover:bg-gray-800 disabled:bg-gray-500 transition"
+      >
+        {load ? "Adding..." : "Add Product"}
+      </button>
       </div>
-    
+    </div>
   );
 }

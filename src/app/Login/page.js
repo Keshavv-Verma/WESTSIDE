@@ -3,9 +3,8 @@
 import Link from 'next/link'
 import React, { useState } from 'react'
 
-import { GoogleLogin,useGoogleOneTapLogin } from '@react-oauth/google';
-import 'react-toastify/dist/ReactToastify.css';
-import toast, { Toaster } from 'react-hot-toast';
+import { GoogleLogin } from '@react-oauth/google';
+import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation'
 const page = () => {
   const router= useRouter()
@@ -33,8 +32,9 @@ const page = () => {
       body: JSON.stringify({email,password}),
     }).then((a)=>a.json()).then((json)=>{
       if (json.success==true && json.token!=null) {
-        toast.success("Login Success");
-        document.cookie=`token=${JSON.stringify(json['token'])} path=/`;
+        toast.dismiss();
+        toast.success("Login Success", { duration: 1500 });
+        document.cookie=`token=${JSON.stringify(json['token'])};path=/`;
         
         router.push(`/`)
         router.refresh()
@@ -56,31 +56,6 @@ const page = () => {
         </div>
         <div className="lower-portion my-5">
             <div className="buttons"></div>
-            <Toaster
-  position="top-center"
-  reverseOrder={false}
-  gutter={8}
-  containerClassName=""
-  containerStyle={{}}
-  toastOptions={{
-    // Define default options
-    className: '',
-    duration: 5000,
-    style: {
-      background: '#363636',
-      color: '#fff',
-    },
-    
-    // Default options for specific types
-    success: {
-      duration: 3000,
-      theme: {
-        primary: 'green',
-        secondary: 'black',
-      },
-    },
-  }}
-/>
             <div className="lower-right-portion">
                 <h1 className='text-3xl my-3'>Login</h1>
                 <h1 className='text-xl my-2 '>Enter Email</h1>
@@ -106,7 +81,7 @@ const page = () => {
     router.refresh()
   }}
   onError={() => {
-    console.log('Login Failed');
+    toast.error('Login Failed');
   }}
 />
   </div>

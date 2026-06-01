@@ -1,6 +1,5 @@
-'use server'
 import React from 'react'
-import Navbar from '../Navbar'
+import NavbarClient from './NavbarClient'
 import { cookies } from 'next/headers'
 const NavDataComponent =async () => {
   
@@ -38,7 +37,7 @@ const NavDataComponent =async () => {
       })}
   return (
     <>
-    <Navbar outlet={myjson}></Navbar>
+    <NavbarClient outlet={myjson} />
     </>
   )
 }

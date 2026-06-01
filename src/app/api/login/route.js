@@ -7,7 +7,6 @@ export async function POST(req,res){
     try{
 
         let {email,password}=await req.json()
-        console.log("The password is",password);
         //connecting with mongodb
         await connectDb();
         // Finding my query
@@ -17,11 +16,8 @@ export async function POST(req,res){
             query.select('email password name');
             // execute the query at a later time
             const userData = await query.exec();
-            console.log("User Data Password is:",userData.password);
-            console.log("User Id is:",userData._id);
             var bytes  = CryptoJS.AES.decrypt(userData.password,process.env.CRYPTO_SECRET);
             var originalpass = bytes.toString(CryptoJS.enc.Utf8);
-            console.log("The originalText text is:",originalpass);
             if (originalpass===password) {
                 const token=await sign({email:userData.email,name:userData.name},process.env.JWT_SECRET)
               
@@ -29,13 +25,12 @@ export async function POST(req,res){
             }
             
             else{
-                return Response.json({status:false},{status:200})
+                return Response.json({success:false},{status:200})
 
             }
             
     }
     catch(error){
-        console.log("Error Founded",error);
         return Response.json({status:false},{status:400})
     }
 

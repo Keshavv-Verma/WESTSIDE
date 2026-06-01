@@ -1,12 +1,9 @@
 "use client"
 import React, { useState } from 'react'
 import CommentCard from './CommentCard'
-import {Slider} from "@nextui-org/react";
 import StarsRating from './StarsRating';
-import {Textarea,Button} from "@nextui-org/react";
-import {CameraIcon} from './CameraIcon';
 import { FaGrinStars } from "react-icons/fa";
-
+import { Textarea, Button } from '@nextui-org/react';
 import { Rating } from 'react-simple-star-rating'
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';

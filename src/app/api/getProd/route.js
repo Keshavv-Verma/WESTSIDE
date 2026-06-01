@@ -10,12 +10,10 @@ export async function POST(req,res){
         let data=await req.json()
         data=data['id']
         const k=[]
-        console.log("Data is Server Side is::",data);
             for(let i=0;i<data.length;i++){
                 let value=(data[i])['value']
                 let name=(data[i])['name']
                 const type=name.split("_")[1]
-                console.log("Value in For Loop is:",value);
                 value=value.split('"');
                 value=value[1];
                 let query=0; 
@@ -39,11 +37,9 @@ export async function POST(req,res){
                 k.push(myproduct)
             }
         
-        console.log("Under Server Side ........................",k);
         return Response.json({status:true,k},{status:200})
     }
     catch(error){
-        console.log("Error Founded",error);
         return Response.json({status:false,error:error},{status:400})
     }
 

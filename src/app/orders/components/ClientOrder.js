@@ -1,5 +1,4 @@
 'use client'
-import { faL } from '@fortawesome/free-solid-svg-icons'
 import { redirect } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import React, { useState,useEffect, } from 'react'

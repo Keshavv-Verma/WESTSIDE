@@ -3,8 +3,9 @@ import { SignJWT, jwtVerify } from 'jose';
 import { decode } from "jsonwebtoken";
 // This function can be marked `async` if using `await` inside
 export async function middleware(req, res) {
+  const requestHeaders = new Headers(req.headers);
+
   try {
-    console.log("middleware:::::::::::::::::::::::::");
     // const requestHeaders = new Headers(req.headers);
     // add field to request headers
     let cookie = req.cookies
@@ -21,10 +22,23 @@ export async function middleware(req, res) {
     //   return NextResponse.next();
     // }
 
-    const requestHeaders = new Headers(req.headers);
     let token = query;
     let payload = null;
-    console.log("my Payload in Middleware is:::::", payload);
+
+    if (!token) {
+      requestHeaders.set('user-email', "no")
+
+      if (req.nextUrl.pathname.startsWith('/orders') || req.nextUrl.pathname.startsWith('/admin')) {
+        return NextResponse.redirect(new URL('/Login', req.url))
+      }
+
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders
+        }
+      })
+    }
+
     if (token.length > 200) {
       // console.log("If Condtion Runnign");
       let decrypted = await decode(token)
@@ -44,14 +58,13 @@ export async function middleware(req, res) {
       const k = await jwtVerify(query, new TextEncoder().encode(process.env.JWT_SECRET));
       payload = k.payload;
     }
-    console.log("My payload is is is is is is is is::::::::::::::", payload);
     requestHeaders.set('user-email', payload.email)
 
     if (req.nextUrl.pathname.startsWith('/admin') && payload.email !== process.env.NEXT_PUBLIC_ADMIN_MAIL) {
 
       return NextResponse.redirect(new URL('/', req.url));
     }
-    if (query != null && req.nextUrl.pathname.startsWith('/Login') || req.nextUrl.pathname.startsWith('/SignUp')) {
+    if (query != null && (req.nextUrl.pathname.startsWith('/Login') || req.nextUrl.pathname.startsWith('/SignUp'))) {
 
       return NextResponse.redirect(new URL('/', req.url));
     }
@@ -68,9 +81,7 @@ export async function middleware(req, res) {
 
     // return NextResponse.redirect(new URL(req.nextUrl, req.url))   
   } catch (error) {
-    const requestHeaders = new Headers(req.headers);
     requestHeaders.set('user-email', "no")
-    console.log("Error is:", error);
 
     if (req.nextUrl.pathname.startsWith('/products')) {
 

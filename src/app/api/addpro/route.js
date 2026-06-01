@@ -5,7 +5,6 @@ export async function POST(request,response){
     try{
 
         let make=await request.json()
-        console.log(make);
         await connectDb();
         let p=new Products({
             title:make.title,
@@ -22,7 +21,6 @@ export async function POST(request,response){
         await p.save();
         return Response.json({success:true})
     }catch(error){
-        console.log(error);
         return Response.json({success:false})
     }
         
