@@ -5,26 +5,37 @@ import ProductsWomen from "../../../../models/ProductsWomen";
 import ProductsKids from "../../../../models/ProductsKids";
 import ProductsBeauty from "../../../../models/ProductsBeauty";
 import ProductsBrand from "../../../../models/ProductsBrand";
-await connectDb();
+
+export const dynamic = 'force-dynamic';
+
 let arr=[];
 export async function GET(req,res){
-    let products=await Products.find()
-    let productsWomen=await ProductsWomen.find()
-    let productsKids=await ProductsKids.find()
-    let productsBeauty=await ProductsBeauty.find()
-    arr=products.concat(productsWomen).concat(productsKids).concat(productsBeauty)
-    return NextResponse.json({search:arr})
+    try {
+        await connectDb();
+        let products=await Products.find()
+        let productsWomen=await ProductsWomen.find()
+        let productsKids=await ProductsKids.find()
+        let productsBeauty=await ProductsBeauty.find()
+        arr=products.concat(productsWomen).concat(productsKids).concat(productsBeauty)
+        return NextResponse.json({search:arr})
+    } catch (error) {
+        if (!error.logged) {
+            console.error("Unable to fetch search data:", error.message);
+        }
+        return NextResponse.json({search:[], error:"Unable to fetch search data"},{status:500})
+    }
 }
 export async function POST(req,resp){
-    let products=await Products.find()
-    let productsWomen=await ProductsWomen.find()
-    let productsKids=await ProductsKids.find()
-    let productsBeauty=await ProductsBeauty.find()
-    arr=products.concat(productsWomen).concat(productsKids).concat(productsBeauty)
-    let {data}=await req.json();
-   
-    let res=[];
     try {
+        await connectDb();
+        let products=await Products.find()
+        let productsWomen=await ProductsWomen.find()
+        let productsKids=await ProductsKids.find()
+        let productsBeauty=await ProductsBeauty.find()
+        arr=products.concat(productsWomen).concat(productsKids).concat(productsBeauty)
+        let {data}=await req.json();
+   
+        let res=[];
         // Using o(n^2) 😁😁😁😁 time Complexity But No Problem
         for (let i = 0; i < data.length; i++) {
             const query = data[i];
@@ -41,7 +52,10 @@ export async function POST(req,resp){
         return NextResponse.json({success:true,"data":res},{status:200});
         
     } catch (except) {
-        return NextResponse.json({success:false},{status:404});
+        if (!except.logged) {
+            console.error("Unable to map search data:", except.message);
+        }
+        return NextResponse.json({success:false},{status:500});
     }
 
 }

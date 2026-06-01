@@ -12,6 +12,4 @@ const OrderSchema=new mongoose.Schema({
 },{timestamps:true})
 
 // Not For Recompiling The Module
-mongoose.models={}
-
-export default mongoose.model("Orders",OrderSchema)
+export default mongoose.models.Orders || mongoose.model("Orders",OrderSchema)

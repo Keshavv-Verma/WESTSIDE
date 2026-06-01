@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Sidebar from './Sidebar';
 
 const FilterBar = (params) => {
-  const arr=params.outlet
+  const arr=Array.isArray(params.outlet) ? params.outlet : []
   const [myarr, setmyarr] = useState(arr)
   const [change, setchange] = useState(50)
   const [loading, setloading] = useState(false)

@@ -17,5 +17,4 @@ const ProductsSchema=new mongoose.Schema({
 
 },{timestamps:true})
 // Not For Recompiling The Module
-mongoose.models={}
-export default mongoose.model("ProductsKids",ProductsSchema)
+export default mongoose.models.ProductsKids || mongoose.model("ProductsKids",ProductsSchema)

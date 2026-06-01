@@ -7,7 +7,15 @@ import DataComponent from './[product-name]/components/DataComponent'
 const page = async (slug) => {
   const k=(slug['params'])["fashion-name"];
   
-  let data=await fetch(`${process.env.NEXT_PUBLIC_HOST}api/getProducts?query=${k}`)
+  let json={products: []};
+  try {
+    let data=await fetch(`${process.env.NEXT_PUBLIC_HOST}api/getProducts?query=${k}`)
+    if (data.ok) {
+      json=await data.json()
+    }
+  } catch (error) {
+    console.error("Unable to load product listing:", error.message);
+  }
   let newPromise =  
   new Promise(function (resolve, reject) { 
   setTimeout(function () { 
@@ -15,7 +23,6 @@ const page = async (slug) => {
   }, 500); 
 }); 
 let result = await newPromise; 
-  let json=await data.json()
     return (
       <>
       <div>

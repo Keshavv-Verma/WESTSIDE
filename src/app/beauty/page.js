@@ -1,10 +1,7 @@
-import React from 'react'
-import Product from '../Productcard'
+import { redirect } from 'next/navigation'
 
 const page = () => {
-  return (
-    <Product></Product>
-  )
+  redirect('/products/beauty')
 }
 
 export default page

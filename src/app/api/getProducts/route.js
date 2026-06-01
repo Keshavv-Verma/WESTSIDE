@@ -5,28 +5,34 @@ import ProductsWomen from "../../../../models/ProductsWomen";
 import ProductsKids from "../../../../models/ProductsKids";
 import ProductsBeauty from "../../../../models/ProductsBeauty";
 import ProductsBrand from "../../../../models/ProductsBrand";
+
+export const dynamic = 'force-dynamic';
+
 export async function GET(req,res){
-    const query=req.url.split("=")[1]
-    await connectDb();
-    let products=null;
-    if (query=='men') {
-         products=await Products.find()
-    }
-    else if (query=='women') {
-        products=await ProductsWomen.find()
-    }
-    else if (query=='kids') {
-        // After That Also Making Product Page For Kids
-        products=await ProductsKids.find()
-    }
-    else if (query=='beauty') {
-        // After That Also Making beauty page
-        products=await ProductsBeauty.find()
-    }
-    else if (query=='brand') {
-        // After That Also Making beauty page
-        products=await ProductsBrand.find()
-    }
+    try {
+        const { searchParams } = new URL(req.url);
+        const query = searchParams.get("query");
+        const productModels = {
+            men: Products,
+            women: ProductsWomen,
+            kids: ProductsKids,
+            beauty: ProductsBeauty,
+            brand: ProductsBrand,
+        };
+        const ProductModel = productModels[query];
+
+        if (!ProductModel) {
+            return NextResponse.json({ products: [], error: "Invalid product category" }, { status: 400 });
+        }
+
+        await connectDb();
+        const products = await ProductModel.find();
    
-    return NextResponse.json({products})
+        return NextResponse.json({ products });
+    } catch (error) {
+        if (!error.logged) {
+            console.error("Unable to fetch products:", error.message);
+        }
+        return NextResponse.json({ products: [], error: "Unable to fetch products" }, { status: 500 });
+    }
 }

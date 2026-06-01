@@ -5,8 +5,7 @@ import Spinner from '@/app/Spinner/Spinner';
 
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 
-import 'react-toastify/dist/ReactToastify.css';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import Link from 'next/link';
 import Product from '@/app/Productcard';
 import { usePathname } from 'next/navigation';
@@ -60,7 +59,10 @@ const ProductShow = (outlet) => {
       
       
       document.cookie = `${".westside." + id.substring(0, 10) +"_"+type+"_1"}=${JSON.stringify(id)};path=/`;
-      toast('Item Added To Cart');
+      toast.success('Item Added To Cart', {
+        id: 'cart-added',
+        duration: 2000,
+      });
       setShow("ALREADY IN BAG")
       setDisabled(true);
         
@@ -148,31 +150,6 @@ const ProductShow = (outlet) => {
           <CommentsClient outlet={{rateArray,revArray,prop,reqmail}}></CommentsClient>
           <div className="lower-similar-portion mx-11 my-4">
             <h1 className='text-2xl'>Similar Products</h1>
-            <Toaster
-  position="top-center"
-  reverseOrder={false}
-  gutter={8}
-  containerClassName=""
-  containerStyle={{}}
-  toastOptions={{
-    // Define default options
-    className: '',
-    duration: 5000,
-    style: {
-      background: '#363636',
-      color: '#fff',
-    },
-    
-    // Default options for specific types
-    success: {
-      duration: 3000,
-      theme: {
-        primary: 'green',
-        secondary: 'black',
-      },
-    },
-  }}
-/>
           <div ref={useHorizontalScroll()} style={{ overflow: "auto", }} className="similar-products flex gap-1 justify-center items-center overflow-x-auto my-8 no-scrollbar  ">
             {similar.map((element)=>{
               return <Link scroll={true} href={`${process.env.NEXT_PUBLIC_HOST}products/${type}/${(element['title'].split(" ")).join("-")}`}><Product outletName={element} /></Link>;})}

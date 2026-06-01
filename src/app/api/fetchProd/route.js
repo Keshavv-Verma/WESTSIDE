@@ -9,6 +9,7 @@ export async function POST(req,res){
     try{
    
         const {slug} =await req.json();
+        await connectDb();
         //connecting with mongodb
         let myquery=slug['product-name'].split("-").join(" ");
         const type=slug['fashion-name']
@@ -36,7 +37,10 @@ export async function POST(req,res){
         return Response.json({status:true,myproduct},{status:200})
     }
     catch(error){
-        return Response.json({status:false},{status:400})
+        if (!error.logged) {
+            console.error("Unable to fetch product:", error.message);
+        }
+        return Response.json({status:false},{status:500})
     }
 
 }
