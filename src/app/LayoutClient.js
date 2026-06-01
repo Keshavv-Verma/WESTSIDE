@@ -1,4 +1,5 @@
 'use client'
+import "../utils/patchFetch";
 
 import React from 'react'
 import { GoogleOAuthProvider } from '@react-oauth/google'

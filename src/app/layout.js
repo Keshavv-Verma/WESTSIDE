@@ -1,3 +1,4 @@
+import "../utils/patchFetch";
 import "./globals.css";
 import Footer from "./Footer";
 import NavDataComponent from "./components/NavDataComponent";
