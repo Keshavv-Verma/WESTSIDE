@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 const ClientTrackOrder = (data) => {
-    let datap=data.data.userInfo
+    let datap=data?.data?.userInfo || { products: [], userEmail: '', amount: 0, status: '' }
     console.log("dsdsdsdsdsddsds",datap.products);
   return (
     <div className='my-24 h-fit w-fit   '>

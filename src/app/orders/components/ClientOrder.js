@@ -125,13 +125,13 @@ const ClientOrder = (outlet) => {
                 <input value={state} name='state' onChange={handleChange} className='text-2xl shadow-sm border-2 h-16 border-gray-300 rounded-lg px-3'  type="text" placeholder='State' />
             </div>
             <button disabled={disabled}  className='disabled:bg-slate-500 disabled:border-none disabled:text-white h-16 w-64 rounded-xl m-auto bg-black text-white hover:bg-white hover:text-black hover:border-2 hover:border-black' onClick={()=>{
-              makePayment(FName,LName,address,city,state,pinCode,total-discount,meData['items'])
+              makePayment(FName,LName,address,city,state,pinCode,total-discount,meData['items'] || [])
             }}>Continue To Shopping</button>
                
         </div>
     </div>
     <div className="right-portion border-2   border-gray-300 rounded-2xl p-6 w-70 shadow-lg ">
-        {meData['items'].map((element)=>{
+        {(meData['items'] || []).map((element)=>{
           return <div key={element['_id']} className='h-fit flex gap-2 items-center bg-gray-100 rounded-xl my-4'>
           <img className='rounded-lg h-24 w-20' src={element['img']}  /> 
           <h1 className='text-2xl  font-bold'>{element['title']}</h1>

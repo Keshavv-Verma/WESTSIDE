@@ -54,49 +54,52 @@ const DataComponent =async (outlet) => {
                 }, 100); 
             }); 
             let result = await newPromise; 
-      let outData=await fetchData();
-      console.log("my OutData is is is:::::::::::::::::::",outData['product']);
-      let five=0;
-      let four=0;
-      let three=0;
-      let two=0;
-      let one=0;
-      let n=(outData['product'])['reviews'].length
-      for (let i = 0; i <n ; i++) {
-        const rate = outData['product']['reviews'][i]['rating'];
-        
-        if (rate==5) {
-          five++;
-        }
-        if (rate==4) {
-          four++;
-        }
-        if (rate==3) {
-          three++;
-        }
-        if (rate==2) {
-          two++;
-        }
-        if (rate==1) {
-          one++;
-        }
-        
-      }
-      // console.log("outData is is is is is is",outData);
-      let fetchSimilar=await fetchSimilarProducts(outData);
-      const headersList = headers()
-const reqmail = headersList.get('user-email')
+      let outData = await fetchData();
+      let five = 0;
+      let four = 0;
+      let three = 0;
+      let two = 0;
+      let one = 0;
+      let fetchSimilar = [];
 
-console.log("refrre is.................................................",reqmail);
-  return (
-    <>
-    {outData==undefined && <div> <div className='h-full w-full flex justify-center items-center'>
-        <img className='my-8' src="https://freefrontend.com/assets/img/html-funny-404-pages/CodePen-404-Page.gif" alt="" />
-        </div></div>}
-    {outData!=undefined &&
-    <ProductShow outlet={{outData,fetchSimilar,"rateArray":[five,four,three,two,one],reqmail}}></ProductShow>}
-    </>
-  )
+      if (outData && outData['product']) {
+        console.log("my OutData is is is:::::::::::::::::::", outData['product']);
+        const reviews = outData['product']['reviews'] || [];
+        let n = reviews.length;
+        for (let i = 0; i < n; i++) {
+          const rate = reviews[i]['rating'];
+          if (rate == 5) {
+            five++;
+          }
+          if (rate == 4) {
+            four++;
+          }
+          if (rate == 3) {
+            three++;
+          }
+          if (rate == 2) {
+            two++;
+          }
+          if (rate == 1) {
+            one++;
+          }
+        }
+        fetchSimilar = await fetchSimilarProducts(outData);
+      }
+
+      const headersList = headers()
+      const reqmail = headersList.get('user-email')
+
+      console.log("refrre is.................................................", reqmail);
+      return (
+        <>
+        {(outData == undefined || outData['product'] == undefined) && <div> <div className='h-full w-full flex justify-center items-center'>
+            <img className='my-8' src="https://freefrontend.com/assets/img/html-funny-404-pages/CodePen-404-Page.gif" alt="" />
+            </div></div>}
+        {(outData != undefined && outData['product'] != undefined) &&
+        <ProductShow outlet={{outData,fetchSimilar,"rateArray":[five,four,three,two,one],reqmail}}></ProductShow>}
+        </>
+      )
 }
 
 export default DataComponent
