@@ -1,33 +1,36 @@
-'use client'
 import React from 'react'
-import Link from 'next/link'
-import Product from '@/app/Productcard'
 import FilterBar from '@/app/FilterBar'
-import DataComponent from './[product-name]/components/DataComponent'
+import connectDb from "../../../../middleware/mongoose"
+import Products from "../../../../models/Products"
+import ProductsWomen from "../../../../models/ProductsWomen"
+import ProductsKids from "../../../../models/ProductsKids"
+import ProductsBeauty from "../../../../models/ProductsBeauty"
+import ProductsBrand from "../../../../models/ProductsBrand"
+
 const page = async (slug) => {
-  const k=(slug['params'])["fashion-name"];
-  
-  let json={products: []};
+  const k = (slug['params'])["fashion-name"];
+  let products = [];
   try {
-    let data=await fetch(`${process.env.NEXT_PUBLIC_HOST}api/getProducts?query=${k}`)
-    if (data.ok) {
-      json=await data.json()
+    const productModels = {
+        men: Products,
+        women: ProductsWomen,
+        kids: ProductsKids,
+        beauty: ProductsBeauty,
+        brand: ProductsBrand,
+    };
+    const ProductModel = productModels[k];
+    if (ProductModel) {
+      await connectDb();
+      products = await ProductModel.find();
     }
   } catch (error) {
     console.error("Unable to load product listing:", error.message);
   }
-  let newPromise =  
-  new Promise(function (resolve, reject) { 
-  setTimeout(function () { 
-      resolve("Hello Geeks. Wrapped  setTimeout() in a promise"); 
-  }, 500); 
-}); 
-let result = await newPromise; 
-    return (
-      <>
+  
+  return (
+    <>
       <div>
-        <FilterBar outlet={json['products']}>
-        </FilterBar>
+        <FilterBar outlet={products}></FilterBar>
       </div>
     </>
   )

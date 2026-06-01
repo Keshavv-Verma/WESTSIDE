@@ -1,50 +1,69 @@
 'use server'
 
-import { patchFetch } from "next/dist/server/app-render/entry-base";
 import ProductShow from "./ProductShow";
 import { headers } from "next/headers";
+import connectDb from "../../../../../../middleware/mongoose";
+import Products from "../../../../../../models/Products";
+import ProductsWomen from "../../../../../../models/ProductsWomen";
+import ProductsKids from "../../../../../../models/ProductsKids";
+import ProductsBrand from "../../../../../../models/ProductsBrand";
+import ProductsBeauty from "../../../../../../models/ProductsBeauty";
 
 const DataComponent =async (outlet) => {
   
     const fetchData = async () => {
         try {
-         
-          const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/fetchProd`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ slug: ((outlet['outlet'])['url']) }),
-          });
-          const newData = await response.json();
-  
-          if (newData.status === true && newData.myproduct != null) {
-            const productData = {product:newData.myproduct,slug:((outlet['outlet'])['url'])};
-            return productData;  
-          } else {
-            console.log("Json Not Found");
+          const slug = (outlet['outlet'])['url'];
+          await connectDb();
+          let myquery = slug['product-name'].split("-").join(" ");
+          const type = slug['fashion-name'];
+          let query = null;
+          if (type == 'men') {
+              query = Products.findOne({ 'slug': myquery });
+          } else if (type == 'women') {
+              query = ProductsWomen.findOne({ 'slug': myquery });
+          } else if (type == 'kids') {
+              query = ProductsKids.findOne({ 'slug': myquery });
+          } else if (type == 'beauty') {
+              query = ProductsBeauty.findOne({ 'slug': myquery });
+          } else if (type == 'brand') {
+              query = ProductsBrand.findOne({ 'slug': myquery });
+          }
+          if (!query) return undefined;
+          query.select('title slug desc img category size color price quantity reviews');
+          const myproduct = await query.exec();
+          if (myproduct) {
+            return { product: myproduct, slug };
           }
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error("Error fetching data directly:", error);
         }
       };
       
       const fetchSimilarProducts=async (params)=>{
-        
-        const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}api/getSimilarProducts`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ data: params}),
-        });
-        const newData = await response.json();
-        
-        if (newData.status === true && newData.myproduct != null) {
-          const productData = newData.myproduct;
-          return productData;  
-        } else {
-          console.log("Json Not Found");
+        try {
+          await connectDb();
+          const type = params.slug['fashion-name'];
+          const category = params.product.category;
+          let query = null;
+          if (type == 'men') {
+              query = Products.find({ 'category': category });
+          } else if (type == 'women') {
+              query = ProductsWomen.find({ 'category': category });
+          } else if (type == 'kids') {
+              query = ProductsKids.find({ 'category': category });
+          } else if (type == 'beauty') {
+              query = ProductsBeauty.find({ 'category': category });
+          } else if (type == 'brand') {
+              query = ProductsBrand.find({ 'category': category });
+          }
+          if (!query) return [];
+          query.select('title slug img category size color price quantity');
+          const myproduct = await query.exec();
+          return myproduct || [];
+        } catch (error) {
+          console.error("Error fetching similar products directly:", error);
+          return [];
         }
       }
       let newPromise =  
