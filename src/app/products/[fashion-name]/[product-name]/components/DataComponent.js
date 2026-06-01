@@ -33,7 +33,7 @@ const DataComponent =async (outlet) => {
           query.select('title slug desc img category size color price quantity reviews');
           const myproduct = await query.exec();
           if (myproduct) {
-            return { product: myproduct, slug };
+            return JSON.parse(JSON.stringify({ product: myproduct, slug }));
           }
         } catch (error) {
           console.error("Error fetching data directly:", error);
@@ -60,7 +60,7 @@ const DataComponent =async (outlet) => {
           if (!query) return [];
           query.select('title slug img category size color price quantity');
           const myproduct = await query.exec();
-          return myproduct || [];
+          return JSON.parse(JSON.stringify(myproduct || []));
         } catch (error) {
           console.error("Error fetching similar products directly:", error);
           return [];

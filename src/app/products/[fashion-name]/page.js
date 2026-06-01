@@ -21,7 +21,8 @@ const page = async (slug) => {
     const ProductModel = productModels[k];
     if (ProductModel) {
       await connectDb();
-      products = await ProductModel.find();
+      const foundProducts = await ProductModel.find();
+      products = JSON.parse(JSON.stringify(foundProducts));
     }
   } catch (error) {
     console.error("Unable to load product listing:", error.message);
