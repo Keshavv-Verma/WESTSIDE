@@ -19,12 +19,13 @@
     "jose": "^5.2.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.1.1",
-    "next": "14.1.0",
+    "next": "^14.2.35",
     "next-client-cookies": "^1.1.0",
     "nextjs-toploader": "^1.6.6",
+    "nodemon": "^3.1.14",
     "razorpay": "^2.9.2",
     "react": "^18",
-    "react-cookie-consent": "^9.0.0",
+    "react-cookie-consent": "^10.0.1",
     "react-dom": "^18",
     "react-dropdown": "^1.11.0",
     "react-hot-toast": "^2.4.1",
@@ -39,6 +40,7 @@
     "reactjs-popup": "^2.0.6",
     "replicate": "^1.4.0",
     "shortid": "^2.2.17",
+    "stripe": "^22.2.0",
     "styled-components": "^6.4.1"
   },
   "devDependencies": {
