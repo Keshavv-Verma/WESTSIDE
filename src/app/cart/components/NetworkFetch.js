@@ -2,9 +2,9 @@
 import React from 'react'
 import CartClient from './CartClient'
 
-const NetworkFetch =async (store) => {
-    const storeo=store['store']
-    var total=0;
+const NetworkFetch =async (props) => {
+    const cookies=props?.cookies || []
+    const productIds = cookies.map(cookie => cookie.value).filter(Boolean);
 
     const fetchData=async ()=>{
         let data=await fetch(`${process.env.NEXT_PUBLIC_HOST}api/getProd`, {
@@ -12,7 +12,7 @@ const NetworkFetch =async (store) => {
            headers: {
              'Content-Type': 'application/json',
            },
-           body: JSON.stringify({ id: storeo}), // Send as JSON
+           body: JSON.stringify({ id: productIds}), // Send as JSON
          })
          let json=await data.json()
          return json;

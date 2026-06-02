@@ -15,7 +15,7 @@ const page =async () => {
 
   return (
    <>
-   <NetworkFetch store={CorrCookie}></NetworkFetch>
+   <NetworkFetch cookies={CorrCookie}></NetworkFetch>
    </>
     )
 }
