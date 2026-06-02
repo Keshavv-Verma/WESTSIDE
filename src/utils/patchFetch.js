@@ -2,14 +2,24 @@
 if (typeof globalThis !== 'undefined' && globalThis.fetch && !globalThis.__fetchPatched) {
   const originalFetch = globalThis.fetch;
   globalThis.fetch = function (input, init) {
-    if (typeof input === 'string' && input.startsWith('http://localhost:3000/')) {
-      if (typeof window !== 'undefined') {
-        // Browser/Client-side: Rewrite http://localhost:3000/ to relative path /
-        input = input.replace('http://localhost:3000/', '/');
-      } else {
-        // Server-side: Rewrite http://localhost:3000/ to VERCEL_URL if defined, otherwise local fallback
-        const host = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/` : 'http://localhost:3000/';
-        input = input.replace('http://localhost:3000/', host);
+    if (typeof input === 'string') {
+      const configuredHost = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000/';
+      if (input.startsWith(configuredHost)) {
+        if (typeof window !== 'undefined') {
+          // Browser/Client-side: Rewrite configured host to relative path
+          input = input.replace(configuredHost, '/');
+        } else {
+          // Server-side: Rewrite configured host to VERCEL_URL if defined
+          const host = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/` : configuredHost;
+          input = input.replace(configuredHost, host);
+        }
+      } else if (input.startsWith('http://localhost:3000/')) {
+        if (typeof window !== 'undefined') {
+          input = input.replace('http://localhost:3000/', '/');
+        } else {
+          const host = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/` : 'http://localhost:3000/';
+          input = input.replace('http://localhost:3000/', host);
+        }
       }
     }
     return originalFetch(input, init);

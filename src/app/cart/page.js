@@ -8,10 +8,8 @@ const page =async () => {
   let cookieStore = cookies()
   cookieStore=cookieStore.getAll()
   cookieStore.forEach(element => {
-    let key=element["name"]
-    key=key.split('.')
-    if (key[1]=='westside') {
-    CorrCookie.push(element)
+    if (element.name.includes('westside')) {
+      CorrCookie.push(element)
     }
   });
 

@@ -152,7 +152,7 @@ const ProductShow = (outlet) => {
             <h1 className='text-2xl'>Similar Products</h1>
           <div ref={useHorizontalScroll()} style={{ overflow: "auto", }} className="similar-products flex gap-1 justify-center items-center overflow-x-auto my-8 no-scrollbar  ">
             {similar.map((element)=>{
-              return <Link scroll={true} href={`${process.env.NEXT_PUBLIC_HOST}products/${type}/${(element['title'].split(" ")).join("-")}`}><Product outletName={element} /></Link>;})}
+              return <Link scroll={true} href={`/products/${type}/${(element['title'].split(" ")).join("-")}`}><Product outletName={element} /></Link>;})}
         
              
             </div>
