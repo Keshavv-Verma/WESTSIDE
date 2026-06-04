@@ -1,7 +1,7 @@
 import connectDb from "../../../../middleware/mongoose"
 import User from "../../../../models/User"
+import { SignJWT } from 'jose';
 var CryptoJS = require("crypto-js");
-const jwt = require('jsonwebtoken')
 
 let POST = async (request, response) => {
     try {
@@ -38,7 +38,8 @@ let POST = async (request, response) => {
         })
         await u.save();
 
-        const token = jwt.sign({ success: true, email: email, name: name }, process.env.JWT_SECRET)
+        // CRITICAL FIX: Use same JWT library as login (jose SignJWT)
+        const token = await sign({email: email, name: name}, process.env.JWT_SECRET)
         return Response.json({ success: true, token }, { status: 200 })
 
     } catch (error) {
@@ -47,6 +48,18 @@ let POST = async (request, response) => {
             error: error.message || "Signup failed"
         }, { status: 400 })
     }
+}
+
+async function sign(payload, secret) {
+    const iat = Math.floor(Date.now() / 1000);
+    const exp = iat + 60 * 60; // one hour
+
+    return new SignJWT({ ...payload })
+        .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
+        .setExpirationTime(exp)
+        .setIssuedAt(iat)
+        .setNotBefore(iat)
+        .sign(new TextEncoder().encode(secret));
 }
 
 export { POST };

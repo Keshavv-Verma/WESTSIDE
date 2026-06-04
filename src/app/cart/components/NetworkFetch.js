@@ -4,7 +4,7 @@ import CartClient from './CartClient'
 
 const NetworkFetch =async (props) => {
     const cookies=props?.cookies || []
-    const productIds = cookies.map(cookie => cookie.value).filter(Boolean);
+    const validCookies = cookies.filter(cookie => cookie && cookie.name && cookie.value);
 
     const fetchData=async ()=>{
         let data=await fetch(`${process.env.NEXT_PUBLIC_HOST}api/getProd`, {
@@ -12,7 +12,7 @@ const NetworkFetch =async (props) => {
            headers: {
              'Content-Type': 'application/json',
            },
-           body: JSON.stringify({ id: productIds}), // Send as JSON
+           body: JSON.stringify({ id: validCookies }), // Send as JSON
          })
          let json=await data.json()
          return json;

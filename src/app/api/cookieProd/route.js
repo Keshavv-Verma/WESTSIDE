@@ -1,28 +1,39 @@
 import { cookies, headers } from "next/headers";
-import {SignJWT, jwtVerify,jwtDecrypt} from 'jose';
-import { decode } from "jsonwebtoken";
+import { jwtVerify } from 'jose';
+
 export async function POST(req,res){
-    let token=await req.json();
+    let tokenData = await req.json();
     try {
-    token=token['token']
-    if (!token) {
-        return Response.json({"success":false,data:null},{status:401})
-    }
-    if (token.length>200) {
-        let decrypted=await decode(token)
-        // decrypted=JSON.stringify(decrypted)
-        const payload={name:decrypted.name,
-                    email:decrypted.email,
-                    exp:decrypted['exp'],
-                    nat:decrypted['iat'],
-                    nbf:decrypted['nbf'],
-                }
-        return Response.json({"success":true,data:payload},{status:200})
-    }
-    const {payload} = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
-    return Response.json({"success":true,data:payload},{status:200})
-} catch (error) {
-    return Response.json({"success":false,data:null},{status:400})
+        let token = tokenData?.token;
         
-}
+        if (!token) {
+            return Response.json({"success":false,data:null},{status:401})
+        }
+
+        if (!process.env.JWT_SECRET) {
+            return Response.json({"success":false,data:null,error:"JWT_SECRET not configured"},{status:500})
+        }
+
+        // CRITICAL FIX: Single JWT verification method using jose
+        const {payload} = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+        
+        return Response.json({
+            "success":true,
+            "data":{
+                name: payload.name,
+                email: payload.email,
+                exp: payload.exp,
+                iat: payload.iat,
+                nbf: payload.nbf,
+            }
+        },{status:200})
+        
+    } catch (error) {
+        console.error('Token verification error:', error.message);
+        return Response.json({
+            "success":false,
+            "data":null,
+            "error": "Invalid or expired token"
+        },{status:401})
+    }
 }

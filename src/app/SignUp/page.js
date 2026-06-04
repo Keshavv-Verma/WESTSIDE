@@ -38,7 +38,7 @@ const page = () => {
     }).then((a) => a.json()).then((json) => {
       if (json.success == true && json.token) {
         toast.success("Sign Up Successfully");
-        document.cookie = `token=${JSON.stringify(json['token'])};path=/`;
+        document.cookie = `token=${json.token};path=/;SameSite=Lax${window.location.protocol === 'https:' ? ';Secure' : ''}`;
         router.push(`/`)
         router.refresh()
       }

@@ -26,7 +26,7 @@ const MyCart = (props) => {
   const handleDelete=()=>{
     var myCookies = getCookies();
     Object.keys(myCookies).forEach(key => {
-      if (key.substring(10,20)==outlet['_id'].substring(0, 10)) {
+      if (key.includes('westside') && key.includes(outlet['_id'].substring(0, 10))) {
         delete_cookie(key);
       }
   });
@@ -58,9 +58,11 @@ const MyCart = (props) => {
                         setval(val-1)
                         var myCookies = getCookies();
                         Object.keys(myCookies).forEach(key => {
-                          if (key.substring(10,20)==outlet['_id'].substring(0, 10)) {
+                          if (key.includes('westside') && key.includes(outlet['_id'].substring(0, 10))) {
+                            const parts = key.split("_");
+                            const type = parts[1] || 'men';
                             delete_cookie(key);
-                            document.cookie = `${"."+outlet['_id'].substring(0, 10)+"_"+outlet['size'].split("_")[0]+"_"+ (val-1)}=${JSON.stringify(outlet['_id'])};path=/`;
+                            document.cookie = `${".westside."+outlet['_id'].substring(0, 10)+"_"+type+"_"+ (val-1)}=${JSON.stringify(outlet['_id'])};path=/`;
                           }
                       });
                         
@@ -73,9 +75,11 @@ const MyCart = (props) => {
                         setval(val+1)
                         var myCookies = getCookies();
                         Object.keys(myCookies).forEach(key => {
-                          if (key.substring(10,20)==outlet['_id'].substring(0, 10)) {
+                          if (key.includes('westside') && key.includes(outlet['_id'].substring(0, 10))) {
+                            const parts = key.split("_");
+                            const type = parts[1] || 'men';
                             delete_cookie(key);
-                            document.cookie = `${"."+outlet['_id'].substring(0, 10)+"_"+outlet['size'].split("_")[0]+"_"+ (val+1)}=${JSON.stringify(outlet['_id'])};path=/`;
+                            document.cookie = `${".westside."+outlet['_id'].substring(0, 10)+"_"+type+"_"+ (val+1)}=${JSON.stringify(outlet['_id'])};path=/`;
                           }
                       });
                       // myCookies[`${".westside." + outlet['_id'].substring(0, 10) + "_1"}`]

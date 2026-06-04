@@ -34,7 +34,7 @@ const page = () => {
       if (json.success==true && json.token!=null) {
         toast.dismiss();
         toast.success("Login Success", { duration: 1500 });
-        document.cookie=`token=${json.token};path=/`;
+        document.cookie=`token=${json.token};path=/;SameSite=Lax${window.location.protocol === 'https:' ? ';Secure' : ''}`;
         
         router.push(`/`)
         router.refresh()
